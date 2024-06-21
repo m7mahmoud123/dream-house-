@@ -1,0 +1,384 @@
+<!DOCTYPE html>
+<html lang="ar">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dream House</title>
+    <style>
+        /* Existing styles remain unchanged */
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin: 0;
+            background-color: #f4f4f9;
+            direction: rtl;
+        }
+
+        .container {
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            width: 800px;
+            min-height: 90vh;
+            overflow-y: auto;
+            text-align: center;
+        }
+
+        .input-container {
+            display: flex;
+            flex-direction: column;
+            margin-bottom: 10px;
+        }
+
+        .input-container input {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 10px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            font-size: 16px;
+        }
+
+        .input-container button {
+            padding: 10px;
+            border: none;
+            background-color: #28a745;
+            color: #fff;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+
+        .input-container button:hover {
+            background-color: #218838;
+        }
+
+        #search,
+        #searchPrice {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 10px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            font-size: 16px;
+        }
+
+        .card-container {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .card {
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .card .card-content {
+            text-align: right;
+        }
+
+        .card .card-content strong {
+            display: block;
+            font-size: 25px;
+            margin-bottom: 5px;
+        }
+
+        .card .card-content p {
+            margin: 0;
+            font-size: 18px;
+            color: #666;
+        }
+
+        .card .card-price {
+            font-size: 20px;
+            color: #000;
+            margin-bottom: 10px;
+        }
+
+        .card button {
+            padding: 10px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 14px;
+        }
+
+        .card button.edit-btn {
+            background-color: #ffc107;
+            color: #fff;
+        }
+
+        .card button.edit-btn:hover {
+            background-color: #e0a800;
+        }
+
+        .card button.delete-btn {
+            background-color: #dc3545;
+            color: #fff;
+        }
+
+        .card button.delete-btn:hover {
+            background-color: #c82333;
+        }
+
+
+        .nav {
+            width: 300px;
+            height: 300px;
+            position: fixed;
+            left: 10px;
+            top: 100px;
+            display: flex;
+            flex-wrap: wrap;
+            flex-direction: column;
+            justify-content: space-between;
+            align-items: center;
+            background-color: brown;
+            padding: 20px;
+            font-weight: 900;
+            border-radius: 20px;
+            box-shadow: 2px 2px 2px gray;
+            display: none;
+        }
+
+        .nav a {
+
+            font-size: 25px;
+            font-family: Arial, Helvetica, sans-serif;
+            color: #fff;
+            background-color: #218838;
+            padding: 5px;
+            border-radius: 6px;
+            transition-duration: 1s;
+            text-decoration: none;
+        }
+
+        .nav a:hover {
+
+            background-color: #FFC107;
+            color: #dc3545;
+        }
+
+        .nav h1 {
+
+            color: #fff;
+            text-shadow: 1px 2px 2px gray;
+            font-weight: bold;
+        }
+
+        .close img {
+
+            position: absolute;
+            top: 0px;
+            left: 0px;
+            background-color: #e0a800;
+            padding: 5px;
+            border-radius: 10px;
+        }
+
+        .open img {
+            width: 50px;
+            background-color: red;
+            position: absolute;
+            top: 10px;
+            left: 10px;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="open">
+        <img src="./menu_24dp_FILL0_wght400_GRAD0_opsz24.svg">
+    </div>
+
+    <div class="nav">
+        <h1>لوحة التحكم</h1>
+        <a href="index.html">قطع مباشر</a>
+        <a href="second.html"> قطع المكاتب</a>
+        <a href="customer.html">ادارة العملاء</a>
+        <div class="close">
+            <img src="./close_24dp_FILL0_wght400_GRAD0_opsz24.svg">
+        </div>
+
+    </div>
+    <div class="container">
+        <h1>قطع مباشر <span id="cardCount">(0)</span></h1>
+        <div class="input-container">
+            <input type="text" id="name" placeholder="الاسم">
+            <input type="text" id="description" placeholder="تفاصيل القطعة">
+            <input type="text" id="price" placeholder="السعر">
+            <button id="addBtn">إضافة</button>
+        </div>
+        <input type="text" id="search" placeholder="بحث بالاسم أو التفاصيل...">
+        <input type="number" id="searchPrice" placeholder="بحث بالسعر...">
+        <div id="cardContainer" class="card-container"></div>
+    </div>
+
+    <script>
+        document.getElementById('addBtn').addEventListener('click', addCard);
+        document.getElementById('search').addEventListener('input', searchCards);
+        document.getElementById('searchPrice').addEventListener('input', searchCardsByPrice);
+
+        document.addEventListener('DOMContentLoaded', () => {
+            loadCardsFromLocalStorage();
+            updateCardCount();
+        });
+
+        function addCard() {
+            const name = document.getElementById('name').value;
+            const description = document.getElementById('description').value;
+            const price = document.getElementById('price').value;
+
+            if (name && description && price) {
+                const cardData = { name, description, price };
+                saveCardToLocalStorage(cardData);
+                appendCardToDOM(cardData);
+                updateCardCount();
+
+                document.getElementById('name').value = '';
+                document.getElementById('description').value = '';
+                document.getElementById('price').value = '';
+            } else {
+                alert('يرجى إدخال الاسم والتفاصيل والسعر');
+            }
+        }
+
+        function searchCards() {
+            const searchTerm = document.getElementById('search').value.toLowerCase();
+            const cards = document.querySelectorAll('.card');
+
+            cards.forEach(card => {
+                const name = card.querySelector('strong').textContent.toLowerCase();
+                const description = card.querySelector('p').textContent.toLowerCase();
+
+                if (name.includes(searchTerm) || description.includes(searchTerm)) {
+                    card.style.display = '';
+                } else {
+                    card.style.display = 'none';
+                }
+            });
+        }
+
+        function searchCardsByPrice() {
+            const searchPrice = document.getElementById('searchPrice').value;
+            const cards = document.querySelectorAll('.card');
+
+            cards.forEach(card => {
+                const price = card.querySelector('.card-price').textContent;
+
+                if (price.includes(searchPrice)) {
+                    card.style.display = '';
+                } else {
+                    card.style.display = 'none';
+                }
+            });
+        }
+
+        function editCard(card, oldData) {
+            const newName = prompt('تعديل الاسم', oldData.name);
+            const newDescription = prompt('تعديل التفاصيل', oldData.description);
+            const newPrice = prompt('تعديل السعر', oldData.price);
+
+            if (newName && newDescription && newPrice) {
+                const cardData = { name: newName, description: newDescription, price: newPrice };
+                updateCardInLocalStorage(oldData.name, cardData);
+
+                const cardContent = card.querySelector('.card-content');
+                cardContent.innerHTML = `<strong>${newName}</strong><p>${newDescription}</p>`;
+                card.querySelector('.card-price').textContent = `${newPrice} جنيه`;
+                updateCardCount();
+            }
+        }
+
+        function saveCardToLocalStorage(cardData) {
+            const cards = JSON.parse(localStorage.getItem('cards')) || [];
+            cards.push(cardData);
+            localStorage.setItem('cards', JSON.stringify(cards));
+        }
+
+        function loadCardsFromLocalStorage() {
+            const cards = JSON.parse(localStorage.getItem('cards')) || [];
+            cards.forEach(cardData => appendCardToDOM(cardData));
+            updateCardCount();
+        }
+
+        function updateCardInLocalStorage(oldName, updatedCardData) {
+            let cards = JSON.parse(localStorage.getItem('cards')) || [];
+            cards = cards.map(card => card.name === oldName ? updatedCardData : card);
+            localStorage.setItem('cards', JSON.stringify(cards));
+        }
+
+        function removeCardFromLocalStorage(cardName) {
+            let cards = JSON.parse(localStorage.getItem('cards')) || [];
+            cards = cards.filter(card => card.name !== cardName);
+            localStorage.setItem('cards', JSON.stringify(cards));
+        }
+
+        function appendCardToDOM(cardData) {
+            const cardContainer = document.getElementById('cardContainer');
+            const card = document.createElement('div');
+            card.className = 'card';
+
+            const cardContent = document.createElement('div');
+            cardContent.className = 'card-content';
+            cardContent.innerHTML = `<strong>${cardData.name}</strong><p>${cardData.description}</p>`;
+
+            const cardPrice = document.createElement('div');
+            cardPrice.className = 'card-price';
+            cardPrice.textContent = `${cardData.price} جنيه`;
+
+            const editBtn = document.createElement('button');
+            editBtn.className = 'edit-btn';
+            editBtn.textContent = 'تعديل';
+            editBtn.addEventListener('click', () => editCard(card, cardData));
+
+            const deleteBtn = document.createElement('button');
+            deleteBtn.className = 'delete-btn';
+            deleteBtn.textContent = 'حذف';
+            deleteBtn.addEventListener('click', () => {
+                card.remove();
+                removeCardFromLocalStorage(cardData.name);
+                updateCardCount();
+            });
+
+            card.appendChild(cardContent);
+            card.appendChild(cardPrice);
+            card.appendChild(editBtn);
+            card.appendChild(deleteBtn);
+
+            cardContainer.appendChild(card);
+        }
+
+        function updateCardCount() {
+            const cardCount = document.querySelectorAll('.card').length;
+            document.getElementById('cardCount').textContent = `(${cardCount})`;
+        }
+
+
+        let close = document.getElementsByClassName("close")[0]
+        let nav = document.getElementsByClassName("nav")[0]
+        let open = document.getElementsByClassName("open")[0]
+        open.onclick = function () {
+
+            nav.style.display = "flex"
+
+        }
+
+        close.onclick = function () {
+            nav.style.display = "none"
+        }
+    </script>
+</body>
+
+</html>

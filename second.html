@@ -1,0 +1,382 @@
+<!DOCTYPE html>
+<html lang="ar">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dream house</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f0f0f0;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            height: 100vh;
+        }
+
+        .container {
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0px 0px 10px 0px rgba(0, 0, 0, 0.1);
+            max-width: 800px;
+            width: 100%;
+        }
+
+        h1 {
+            text-align: center;
+            color: #333;
+            margin-bottom: 30px;
+            position: relative;
+            /* Added this line */
+        }
+
+        .entry-counter {
+            position: absolute;
+            top: -30px;
+            left: 50%;
+            transform: translateX(-50%);
+            background-color: #3498db;
+            color: white;
+            padding: 5px 10px;
+            border-radius: 20px;
+            font-size: 14px;
+        }
+
+        .form-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .form-container input,
+        .form-container button {
+            padding: 10px;
+            border: 1px solid #4CAF50;
+            border-radius: 5px;
+            flex: 1;
+        }
+
+        .form-container input[type="text"] {
+            flex-basis: calc(50% - 5px);
+            font-size: 20px;
+        }
+
+        #addButton {
+            background-color: #4CAF50;
+            color: white;
+            cursor: pointer;
+            transition: background-color 0.3s;
+            flex-basis: calc(50% - 5px);
+        }
+
+        #addButton:hover {
+            background-color: #45a049;
+        }
+
+        #search {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #4CAF50;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+
+        .card {
+            background-color: #f9f9f9;
+            padding: 15px;
+            border-radius: 5px;
+            margin-bottom: 10px;
+            box-shadow: 0px 2px 4px 0px rgba(0, 0, 0, 0.1);
+        }
+
+        .card h2 {
+            margin-bottom: 10px;
+            color: #333;
+        }
+
+        .card p {
+            margin-bottom: 5px;
+            color: #666;
+            font-size: 20px;
+        }
+
+        .card-data {
+            font-weight: bold;
+            color: #27ae60;
+            font-size: 25px;
+        }
+
+        .entry button {
+            padding: 8px 15px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+            background-color: #e74c3c;
+            color: white;
+            margin-left: 5px;
+        }
+
+        .entry button:hover {
+            background-color: #c0392b;
+        }
+
+        .design {
+            width: 100px;
+            border-radius: 10px;
+            font-size: 25px;
+            font-weight: bold;
+            background-color: #dc3545;
+            margin-top: 10px;
+            border: none;
+            color: #fff;
+        }
+
+        .nav {
+            width: 300px;
+            height: 300px;
+            position: fixed;
+            left: 10px;
+            top: 100px;
+            display: flex;
+            flex-wrap: wrap;
+            flex-direction: column;
+            justify-content: space-between;
+            align-items: center;
+            background-color: brown;
+            padding: 20px;
+            font-weight: 900;
+            border-radius: 20px;
+            box-shadow: 2px 2px 2px gray;
+            display: none;
+        }
+
+        .nav a {
+            font-size: 25px;
+            font-family: Arial, Helvetica, sans-serif;
+            color: #fff;
+            background-color: #218838;
+            padding: 5px;
+            border-radius: 6px;
+            transition-duration: 1s;
+            text-decoration: none;
+        }
+
+        .nav a:hover {
+            background-color: #FFC107;
+            color: #dc3545;
+        }
+
+        .nav h1 {
+            color: #fff;
+            text-shadow: 1px 2px 2px gray;
+            font-weight: bold;
+        }
+
+        .close img {
+            position: absolute;
+            top: 0px;
+            left: 0px;
+            background-color: #e0a800;
+            padding: 5px;
+            border-radius: 10px;
+        }
+
+        .open img {
+            width: 50px;
+            background-color: red;
+            position: absolute;
+            top: 10px;
+            left: 10px;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="open">
+        <img src="./menu_24dp_FILL0_wght400_GRAD0_opsz24.svg">
+    </div>
+    <div class="nav">
+        <h1>لوحة التحكم</h1>
+        <a href="index.html">قطع مباشر</a>
+        <a href="second.html"> قطع المكاتب</a>
+        <a href="customer.html">ادارة العملاء</a>
+        <div class="close">
+            <img src="./close_24dp_FILL0_wght400_GRAD0_opsz24.svg">
+        </div>
+    </div>
+    <div class="container">
+        <h1>قطع مكاتب<span id="entryCount" class="entry-counter"></span></h1>
+        <div class="form-container">
+            <input type="text" id="name" placeholder="الاسم">
+            <input type="text" id="description" placeholder="تفاصيل القطعة">
+            <input type="text" id="data" placeholder="السعر">
+            <button id="addButton">إضافة</button>
+        </div>
+        <input type="text" id="search" placeholder="بحث">
+        <div id="entriesContainer"></div>
+    </div>
+    <script>
+        let close = document.getElementsByClassName("close")[0];
+        let nav = document.getElementsByClassName("nav")[0];
+        let open = document.getElementsByClassName("open")[0];
+
+        open.onclick = function () {
+            nav.style.display = "flex";
+        };
+
+        close.onclick = function () {
+            nav.style.display = "none";
+        };
+
+        // Load existing entries from localStorage
+        window.onload = function () {
+            loadEntries();
+        };
+
+        // Add new entry to localStorage and update display
+        document.getElementById('addButton').addEventListener('click', function () {
+            addEntry();
+            updateEntryCount();
+        });
+
+        // Function to add a new entry
+        function addEntry() {
+            const name = document.getElementById('name').value;
+            const description = document.getElementById('description').value;
+            const data = document.getElementById('data').value;
+
+            if (name && description && data) {
+                const entry = {
+                    name: name,
+                    description: description,
+                    data: data
+                };
+
+                let entries = [];
+                if (localStorage.getItem('entries')) {
+                    entries = JSON.parse(localStorage.getItem('entries'));
+                }
+
+                entries.push(entry);
+                localStorage.setItem('entries', JSON.stringify(entries));
+
+                displayEntries();
+                updateEntryCount(); // Ensure count is updated after adding an entry
+            } else {
+                alert('يرجى ملء جميع الحقول.');
+            }
+        }
+
+        // Function to display all entries
+        function displayEntries() {
+            const entriesContainer = document.getElementById('entriesContainer');
+            entriesContainer.innerHTML = '';
+
+            let entries = [];
+            if (localStorage.getItem('entries')) {
+                entries = JSON.parse(localStorage.getItem('entries'));
+            }
+
+            entries.forEach(function (entry, index) {
+                const entryCard = document.createElement('div');
+                entryCard.classList.add('card');
+
+                const nameHeading = document.createElement('h2');
+                nameHeading.textContent = entry.name;
+                entryCard.appendChild(nameHeading);
+
+                const descriptionPara = document.createElement('p');
+                descriptionPara.textContent = ` ${entry.description}`;
+                entryCard.appendChild(descriptionPara);
+
+                const dataPara = document.createElement('p');
+                dataPara.innerHTML = `<span class="card-data">${entry.data}</span>`;
+                entryCard.appendChild(dataPara);
+
+                const editButton = document.createElement('button');
+                editButton.textContent = 'تعديل';
+                editButton.classList.add("design");
+                editButton.addEventListener('click', function () {
+                    editEntry(index);
+                });
+                entryCard.appendChild(editButton);
+
+                const deleteButton = document.createElement('button');
+                deleteButton.textContent = 'حذف';
+                deleteButton.classList.add("design");
+                deleteButton.addEventListener('click', function () {
+                    deleteEntry(index);
+                });
+                entryCard.appendChild(deleteButton);
+
+                entriesContainer.appendChild(entryCard);
+            });
+        }
+
+        // Function to load entries from localStorage
+        function loadEntries() {
+            if (localStorage.getItem('entries')) {
+                displayEntries();
+            }
+            updateEntryCount();
+        }
+
+        // Function to update the entry count display
+        function updateEntryCount() {
+            let count = 0;
+            if (localStorage.getItem('entries')) {
+                count = JSON.parse(localStorage.getItem('entries')).length;
+            }
+            document.getElementById('entryCount').textContent = ` (${count} )`;
+        }
+
+        // Function to edit an existing entry
+        function editEntry(index) {
+            let entries = JSON.parse(localStorage.getItem('entries'));
+            const newName = prompt('يرجى إدخال الاسم الجديد', entries[index].name);
+            const newDescription = prompt('يرجى إدخال الوصف الجديد', entries[index].description);
+            const newData = prompt('يرجى إدخال البيانات الجديدة', entries[index].data);
+            if (newName !== null && newDescription !== null && newData !== null) {
+                entries[index].name = newName;
+                entries[index].description = newDescription;
+                entries[index].data = newData;
+                localStorage.setItem('entries', JSON.stringify(entries));
+                displayEntries();
+                updateEntryCount(); // Ensure count is updated after editing an entry
+            }
+        }
+
+        // Function to delete an entry
+        function deleteEntry(index) {
+            let entries = JSON.parse(localStorage.getItem('entries'));
+            entries.splice(index, 1);
+            localStorage.setItem('entries', JSON.stringify(entries));
+            displayEntries();
+            updateEntryCount(); // Ensure count is updated after deleting an entry
+        }
+
+        // Function to search entries
+        document.getElementById('search').addEventListener('input', function () {
+            const searchValue = this.value.toLowerCase();
+            const entries = document.getElementById('entriesContainer').children;
+
+            for (let entry of entries) {
+                const name = entry.children[0].textContent.toLowerCase();
+                const description = entry.children[1].textContent.toLowerCase();
+                const data = entry.children[2].children[0].textContent.toLowerCase();
+
+                if (name.includes(searchValue) || description.includes(searchValue) || data.includes(searchValue)) {
+                    entry.style.display = 'block';
+                } else {
+                    entry.style.display = 'none';
+                }
+            }
+        });
+    </script>
+</body>
+
+</html>
